@@ -22,6 +22,7 @@ def get_events():
         creds = Credentials.from_authorized_user_file("token.json", SCOPES)
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
+            print("credentials.json expired but refreshing...")
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
@@ -100,7 +101,7 @@ def create_events():
             'recurrence': [
                 'RRULE:FREQ=DAILY;COUNT=1'  # if the event will repet
             ],
-            'attendees': request.json["email"],
+            'attendees': [{"email": request.json["email"]}],
             'reminders': {
                 'useDefault': False,
                 'overrides': [
